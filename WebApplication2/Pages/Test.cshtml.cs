@@ -1,65 +1,119 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
 
 namespace WebApplication2.Pages
 {
+
+
     public class TestModel : PageModel
     {
-        public string SelectedTab { get; set; } = "past-day"; // Default selected tab
-        public string TabTitle { get; set; } = "Past day"; // Default tab title
+        public List<Tab> Tabs { get; set; }
 
-        public List<TableRow> TableContent { get; set; } = new List<TableRow>();
-
-        public void OnGet(string tab)
+        public void OnGet()
         {
-            if (!string.IsNullOrEmpty(tab) && (tab == "past-day" || tab == "past-week" || tab == "past-month" || tab == "past-year"))
+            Tabs = new List<Tab>
             {
-                SelectedTab = tab;
-                SetTabContent();
-            }
-        }
-
-        private void SetTabContent()
-        {
-            // Clear previous content
-            TableContent.Clear();
-
-            // Set content based on selected tab
-            if (SelectedTab == "past-day")
-            {
-                TabTitle = "Past day";
-                TableContent.Add(new TableRow { CaseManager = "David Francis", CasesOpened = 3, CasesClosed = 0 });
-                TableContent.Add(new TableRow { CaseManager = "Paul Farmer", CasesOpened = 1, CasesClosed = 0 });
-                TableContent.Add(new TableRow { CaseManager = "Rita Patel", CasesOpened = 2, CasesClosed = 0 });
-            }
-            else if (SelectedTab == "past-week")
-            {
-                TabTitle = "Past week";
-                TableContent.Add(new TableRow { CaseManager = "David Francis", CasesOpened = 24, CasesClosed = 18 });
-                TableContent.Add(new TableRow { CaseManager = "Paul Farmer", CasesOpened = 16, CasesClosed = 20 });
-                TableContent.Add(new TableRow { CaseManager = "Rita Patel", CasesOpened = 24, CasesClosed = 27 });
-            }
-            else if (SelectedTab == "past-month")
-            {
-                TabTitle = "Past month";
-                TableContent.Add(new TableRow { CaseManager = "David Francis", CasesOpened = 98, CasesClosed = 95 });
-                TableContent.Add(new TableRow { CaseManager = "Paul Farmer", CasesOpened = 122, CasesClosed = 131 });
-                TableContent.Add(new TableRow { CaseManager = "Rita Patel", CasesOpened = 126, CasesClosed = 142 });
-            }
-            else if (SelectedTab == "past-year")
-            {
-                TabTitle = "Past year";
-                TableContent.Add(new TableRow { CaseManager = "David Francis", CasesOpened = 1380, CasesClosed = 1472 });
-                TableContent.Add(new TableRow { CaseManager = "Paul Farmer", CasesOpened = 1129, CasesClosed = 1083 });
-                TableContent.Add(new TableRow { CaseManager = "Rita Patel", CasesOpened = 1539, CasesClosed = 1265 });
-            }
+                new Tab
+                {
+                    Id = "past-day",
+                    Title = "Past day",
+                    Headers = new List<string> { "Case manager", "Cases opened", "Cases closed" },
+                    Rows = new List<Row>
+                    {
+                        new Row { Cells = new List<string> { "David Francis", "3", "0" } },
+                        new Row { Cells = new List<string> { "Paul Farmer", "1", "0" } },
+                        new Row { Cells = new List<string> { "Rita Patel", "2", "0" } },
+                        new Row { Cells = new List<string> { "David Francis", "3", "0" } },
+                        new Row { Cells = new List<string> { "Paul Farmer", "1", "0" } },
+                        new Row { Cells = new List<string> { "Rita Patel", "2", "0" } }
+                    }
+                },
+                new Tab
+                {
+                    Id = "past-week",
+                    Title = "Past week",
+                    Headers = new List<string> { "Case manager", "Cases opened", "Cases closed" },
+                    Rows = new List<Row>
+                    {
+                        new Row { Cells = new List<string> { "David Francis", "24", "18" } },
+                        new Row { Cells = new List<string> { "Paul Farmer", "16", "20" } },
+                        new Row { Cells = new List<string> { "Rita Patel", "24", "27" } }
+                    }
+                },
+                // Add more tabs as needed
+            };
         }
     }
 
-    public class TableRow
+    public class Tab
     {
-        public string CaseManager { get; set; }
-        public int CasesOpened { get; set; }
-        public int CasesClosed { get; set; }
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public List<string> Headers { get; set; }
+        public List<Row> Rows { get; set; }
+    }
+
+    public class Row
+    {
+        public List<string> Cells { get; set; }
     }
 }
+
+
+
+//{
+//    "Tabs": [
+//      {
+//        "Id": "past-day",
+//      "Title": "Past day",
+//      "Headers": ["Case manager", "Cases opened", "Cases closed"],
+//      "Rows": [
+//        { "Cells": ["David Francis", "3", "0"] },
+//        { "Cells": ["Paul Farmer", "1", "0"] },
+//        { "Cells": ["Rita Patel", "2", "0"] }
+//      ]
+//    },
+//    {
+//        "Id": "past-week",
+//      "Title": "Past week",
+//      "Headers": ["Case manager", "Cases opened", "Cases closed"],
+//      "Rows": [
+//        { "Cells": ["David Francis", "24", "18"] },
+//        { "Cells": ["Paul Farmer", "16", "20"] },
+//        { "Cells": ["Rita Patel", "24", "27"] }
+//      ]
+//    }
+//  ]
+//}
+
+
+//using Microsoft.AspNetCore.Mvc.RazorPages;
+
+//namespace WebApplication2.Pages
+//{
+//    public class TestModel : PageModel
+//    {
+//        public void OnGet()
+//        {
+//            var headers = new string[] { "Case ID", "Case manager", "Cases opened", "Cases closed" };
+
+//            var rows = new object[]
+//            {
+//                new { Cells = new string[] { "1", "David Francis", "3", "0" } },
+//                new { Cells = new string[] { "2", "Paul Farmer", "1", "0" } },
+//                new { Cells = new string[] { "3", "Rita Patel", "2", "0" } }
+//            };
+
+//            var tabTitles = new[] { "Cases", "Tasks", "Incidents" };
+
+//            // Assigning data to the model
+//            Headers = headers;
+//            Rows = rows;
+//            TabTitles = tabTitles;
+//        }
+
+//        public string[] Headers { get; private set; }
+//        public object[] Rows { get; private set; }
+//        public string[] TabTitles { get; private set; }
+//    }
+//}
